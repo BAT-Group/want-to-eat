@@ -26,4 +26,19 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:23.4.0'
     testCompile 'junit:junit:4.12'
+
+    //Rxjava
+    compile 'io.reactivex.rxjava2:rxjava:2.1.0'
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    //Rxjava与retrofit适配器
+    compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    //与Rxjava一起使用的http请求
+    compile 'com.amitshekhar.android:rx2-android-networking:1.0.0'
+    //Retrofit 2.0中需要解析json
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    //okhttp3网络请求
+    compile 'com.squareup.okhttp3:okhttp:3.8.1'
+    //谷歌解析转化json
+    compile 'com.google.code.gson:gson:2.8.1'
 }
