@@ -16,4 +16,55 @@
         app:popupTheme="@style/ToolbarPopupTheme" />
 
 
+    <RelativeLayout
+        android:layout_below="@id/toolbar"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/txt_lin"
+            android:orientation="horizontal"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="180dp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/txt_name"
+                android:text="吃什么"
+                android:gravity="center"
+                android:textSize="36sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
+            <TextSwitcher
+                android:id="@+id/txtswitcher"
+                android:inAnimation="@null"
+                android:outAnimation="@null"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TextSwitcher>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/start"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="77dp"
+            android:background="@color/colorPrimary"
+            android:text="开始"
+            android:textColor="@color/colorWhite"/>
+
+    </RelativeLayout>
+
 </RelativeLayout>
