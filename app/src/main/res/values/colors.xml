@@ -3,4 +3,16 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
+
+    <color name="listviewItemBackground">#F0F4F7</color>
+    <color name="listviewItemTitle">#313534</color>
+    <color name="listviewItemSubTitle">#A9ADB0</color>
+
+    <color name="discCerter">#9A1506</color>
+    <color name="colorPrimaryTwo">#DB3F36</color>
+
+    <color name="transparent">#00000000</color>
 </resources>
