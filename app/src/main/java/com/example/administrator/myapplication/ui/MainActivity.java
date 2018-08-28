@@ -1,8 +1,12 @@
 package com.example.administrator.myapplication.ui;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextSwitcher;
@@ -32,12 +36,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
 
     public static final int NOT_START = 0;//未开始随机
     public static final int STARTING = 1;//已经开始随机
+    public static final String SP_NAME = "WANTTOEAT";
 
     private int btn_type = NOT_START;
 
+    SharedPreferences sp;
+    SharedPreferences.Editor editor;
+
     Timer timer;
 
-    public String foodStr = "盖浇饭 砂锅 大排档 米线 满汉全席 西餐 麻辣烫 自助餐 炒面 快餐 水果 西北风 馄饨 火锅 烧烤 泡面 速冻水饺 日本料理 涮羊肉 味千拉面 肯德基 面包 扬州炒饭 自助餐 茶餐厅 海底捞 咖啡 比萨 麦当劳 兰州拉面 沙县小吃 烤鱼 海鲜 铁板烧 韩国料理 粥 快餐 东南亚菜 甜点 农家菜 川菜 粤菜 湘菜 本帮菜 竹笋烤肉";
+    public String foodStr = "盖浇饭≠砂锅≠大排档≠米线≠满汉全席≠西餐≠麻辣烫≠自助餐≠炒面≠快餐≠水果≠西北风≠馄饨≠火锅≠烧烤≠泡面≠速冻水饺≠日本料理≠涮羊肉≠味千拉面≠肯德基≠面包≠扬州炒饭≠自助餐≠茶餐厅≠海底捞≠咖啡≠比萨≠麦当劳≠兰州拉面≠沙县小吃≠烤鱼≠海鲜≠铁板烧≠韩国料理≠粥≠快餐≠东南亚菜≠甜点≠农家菜≠川菜≠粤菜≠湘菜≠本帮菜≠竹笋烤肉";
 
     public String[] foodArr;
     int cur = 0;
@@ -48,7 +56,18 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         ButterKnife.bind(this);
         setToolbar();
 
+        sp = mContext.getSharedPreferences(SP_NAME,MODE_PRIVATE);
+        editor = sp.edit();
+        editor.putString("defaultFoodStr",foodStr);
+        editor.commit();
+
+        String str = sp.getString("saveFoodStr","");
+        if (!"".equals(str)){
+            foodStr = str;
+        }
+
         dealList(foodStr);
+
         start.setOnClickListener(this);
         txtswitcher.setFactory(new ViewSwitcher.ViewFactory() {
             @Override
@@ -64,6 +83,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         if (timer!=null)
@@ -73,10 +98,41 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     private void setToolbar() {
         toolbar.setTitle("WantToEat");
         setSupportActionBar(toolbar);
+        toolbar.setOnMenuItemClickListener(omcl);
+    }
+
+    Toolbar.OnMenuItemClickListener omcl = new Toolbar.OnMenuItemClickListener() {
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.add:
+
+                    Intent i = new Intent(MainActivity.this,AddFoodActivity.class);
+
+                    startActivityForResult(i,0);
+
+                    break;
+            }
+            return true;
+        }
+    };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 0 && resultCode == RESULT_OK){
+            String str = sp.getString("saveFoodStr","");
+            if (!"".equals(str)){
+                foodStr = str;
+            }
+            foodArr = str.split("≠");
+        }
     }
 
     public void dealList(String str){
-        foodArr = str.split(" ");
+        foodArr = str.split("≠");
+        editor.putString("saveFoodStr",str);
+        editor.commit();
     }
 
     TimerTask task;
@@ -97,8 +153,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            txtswitcher.setCurrentText(foodArr[cur]);
                             cur = (int) (Math.random() * foodArr.length);
+                            txtswitcher.setCurrentText(foodArr[cur]);
                         }
                     });
                 }

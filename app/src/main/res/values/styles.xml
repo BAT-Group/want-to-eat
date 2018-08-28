@@ -3,6 +3,7 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
+        <item name="android:buttonStyle">@style/buttonStyle</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -17,7 +18,7 @@
     <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.Light">
         <item name="android:textColor">@color/colorWhite</item>
         <item name="subtitleTextColor">@color/colorWhite</item>
-        <item name="android:fitsSystemWindows">true</item>
+        <!--<item name="android:fitsSystemWindows">true</item>-->
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="actionOverflowMenuStyle">@style/OverflowMenuStyle</item>
     </style>
@@ -34,4 +35,13 @@
         <item name="overlapAnchor">false</item>
     </style>
 
+    <style name="buttonStyle" parent="@android:style/Widget.Button">
+        <item name="android:paddingTop">10dip</item>
+        <item name="android:paddingBottom">10dip</item>
+        <item name="android:paddingLeft">16dip</item>
+        <item name="android:paddingRight">16dip</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textColorHint">@color/silver</item>
+        <item name="android:textSize">16sp</item>
+    </style>
 </resources>
