@@ -1,6 +1,8 @@
 package com.example.administrator.myapplication.ui;
 
-import android.content.SharedPreferences;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
@@ -9,12 +11,15 @@ import android.view.MenuItem;
 
 import com.example.administrator.myapplication.R;
 import com.example.administrator.myapplication.base.BaseActivity;
+import com.example.administrator.myapplication.db.DatabaseHelper;
+import com.example.administrator.myapplication.db.EatReaderContract;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.gujun.android.taggroup.TagGroup;
-
-import static com.example.administrator.myapplication.ui.MainActivity.SP_NAME;
 
 /**
  * Created with Android Studio
@@ -29,8 +34,12 @@ public class AddFoodActivity extends BaseActivity {
     @BindView(R.id.tag_group)
     TagGroup tagGroup;
 
-    SharedPreferences sp;
-    SharedPreferences.Editor editor;
+    DatabaseHelper dbhelper;
+
+//    SharedPreferences sp;
+//    SharedPreferences.Editor editor;
+
+    List<String> foodList = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,20 +47,25 @@ public class AddFoodActivity extends BaseActivity {
         setContentView(R.layout.activity_add_food);
         ButterKnife.bind(this);
 
+        dbhelper = new DatabaseHelper(mContext);
+
         toolbar.setTitle("菜单");
         toolbar.setNavigationIcon(R.drawable.ic_back);
         setSupportActionBar(toolbar);
 
-        sp = mContext.getSharedPreferences(SP_NAME,MODE_PRIVATE);
-        editor = sp.edit();
+//
+//        sp = mContext.getSharedPreferences(SP_NAME,MODE_PRIVATE);
+//        editor = sp.edit();
 
-        String str = sp.getString("saveFoodStr","");
-        tagGroup.setTags(str.split("≠"));
+//        String str = sp.getString("saveFoodStr","");
+        getTags();
+
+        tagGroup.setTags(foodList);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_tag_editor_activity, menu);
+//        getMenuInflater().inflate(R.menu.menu_tag_editor_activity, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -75,28 +89,42 @@ public class AddFoodActivity extends BaseActivity {
         super.onBackPressed();
     }
 
-    public void updateTags(CharSequence... tags){
-        clearTags();
-        String str = "";
-        for (CharSequence tag :tags){
-            if ("".equals(str))
-                str += tag.toString();
-            else{
-                str += "≠";
-                str += tag.toString();
-            }
+    public void getTags() {
+        SQLiteDatabase db = dbhelper.getReadableDatabase();
+        Cursor c = db.query(EatReaderContract.MenuEntry.TABLE_NAME,
+                new String[]{EatReaderContract.MenuEntry.COLUMN_MENU_NAME}, null, null, null, null, null);
+        while (c.moveToNext()) {
+            String tag = c.getString(c.getColumnIndex(EatReaderContract.MenuEntry.COLUMN_MENU_NAME));
+            foodList.add(tag);
         }
-        addTag(str);
+        c.close();
+        db.close();
     }
 
-    public void addTag(String str) {
-        editor.putString("saveFoodStr",str);
-        editor.commit();
+    public void updateTags(CharSequence... tags){
+        clearTags();
+        for (CharSequence tag :tags){
+            addTag(tag);
+        }
+    }
+
+    public void addTag(CharSequence tag) {
+        ContentValues values = new ContentValues();
+        SQLiteDatabase db = dbhelper.getWritableDatabase();
+        values.put(EatReaderContract.MenuEntry.COLUMN_MENU_NAME, tag.toString());
+        db.insert(EatReaderContract.MenuEntry.TABLE_NAME, null, values);
+        db.close();
+//        editor.putString("saveFoodStr",str);
+//        editor.commit();
     }
 
     public void clearTags() {
-        editor.putString("saveFoodStr","");
-        editor.commit();
+        SQLiteDatabase db = dbhelper.getWritableDatabase();
+        db.delete(EatReaderContract.MenuEntry.TABLE_NAME, null, null);
+        db.close();
+
+//        editor.putString("saveFoodStr","");
+//        editor.commit();
     }
 
 }
