@@ -40,7 +40,7 @@
                 android:layout_marginTop="10dp"
                 android:textColor="@color/gray"
                 android:text="提示： 1、内容输入完成后点击回车键添加菜单
-                2、菜单添加完毕后，点击返回键自动保存"
+                \n 2、菜单添加完毕后，点击返回键自动保存"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
